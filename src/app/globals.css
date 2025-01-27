@@ -3,74 +3,186 @@
 @tailwind utilities;
  
 @layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
- 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
- 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
- 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
- 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
- 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
- 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
- 
-    --radius: 0.5rem;
-  }
- 
+  :root,
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
- 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
- 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
- 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
- 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
- 
+    --background: 240 100% 2%;
+    --foreground: 0 0% 98%;
+    --card: 240 100% 3%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 100% 3%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 322 100% 50%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 270 100% 50%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
- 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
- 
+    --accent: 48 100% 50%;
+    --accent-foreground: 240 5.9% 10%;
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
- 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 100% 10%;
+    --input: 240 100% 10%;
+    --ring: 322 100% 50%;
+    --radius: 0.5rem;
+  }
+
+  .bitcoin {
+    --background: 0 0% 7%;
+    --foreground: 35 100% 98%;
+    --card: 0 0% 5%;
+    --card-foreground: 35 100% 98%;
+    --popover: 0 0% 5%;
+    --popover-foreground: 35 100% 98%;
+    --primary: 28 100% 50%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 28 100% 40%;
+    --secondary-foreground: 35 100% 98%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 35 30% 80%;
+    --accent: 28 100% 30%;
+    --accent-foreground: 35 100% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 35 100% 98%;
+    --border: 28 100% 30%;
+    --input: 0 0% 15%;
+    --ring: 28 100% 50%;
   }
 }
- 
+
 @layer base {
   * {
     @apply border-border;
   }
   body {
     @apply bg-background text-foreground;
+    background-image: 
+      linear-gradient(to bottom right, rgba(var(--primary) / 0.1) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(var(--primary) / 0.1) 1px, transparent 1px);
+    background-size: 24px 24px;
   }
+}
+
+/* Text glow effect */
+.glow {
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 10px hsl(var(--primary) / 0.5),
+                 0 0 20px hsl(var(--primary) / 0.3),
+                 0 0 30px hsl(var(--primary) / 0.2);
+  }
+  to {
+    text-shadow: 0 0 20px hsl(var(--primary) / 0.6),
+                 0 0 30px hsl(var(--primary) / 0.4),
+                 0 0 40px hsl(var(--primary) / 0.2);
+  }
+}
+
+/* Floating animation */
+.float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* Circuit animations */
+.circuit-path {
+  animation: circuit-flow 4s linear infinite;
+  stroke-dasharray: 20;
+  stroke-linecap: round;
+}
+
+@keyframes circuit-flow {
+  0% {
+    stroke-dashoffset: 1000;
+    stroke-opacity: 0.3;
+  }
+  50% {
+    stroke-opacity: 0.7;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    stroke-opacity: 0.3;
+  }
+}
+
+.circuit-node {
+  animation: node-pulse 2s ease-in-out infinite;
+}
+
+@keyframes node-pulse {
+  0% {
+    r: 2;
+    filter: drop-shadow(0 0 2px hsl(var(--primary)));
+  }
+  50% {
+    r: 4;
+    filter: drop-shadow(0 0 6px hsl(var(--primary)));
+  }
+  100% {
+    r: 2;
+    filter: drop-shadow(0 0 2px hsl(var(--primary)));
+  }
+}
+
+/* Menu transitions */
+.slide-in {
+  animation: slideIn 0.3s ease-out forwards;
+}
+
+.slide-out {
+  animation: slideOut 0.3s ease-out forwards;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+/* Circuit tracer effect */
+.circuit-tracer {
+  animation: trace 3s linear infinite;
+  stroke-dasharray: 5;
+}
+
+@keyframes trace {
+  to {
+    stroke-dashoffset: -1000;
+  }
+}
+
+/* Background elements */
+.background-animation {
+  pointer-events: none;
+  user-select: none;
 }

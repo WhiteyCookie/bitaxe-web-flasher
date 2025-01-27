@@ -1,14 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  output: 'export',
-  ...(process.env.NODE_ENV === 'production' ? {
-    basePath: '/bitaxe-web-flasher',
-    assetPrefix: '/bitaxe-web-flasher',
-  } : {}),
+  ...(process.env.NODE_ENV === 'production'
+    ? { basePath: '/bitaxe-web-flasher', assetPrefix: '/bitaxe-web-flasher' }
+    : {}),
   images: {
-    unoptimized: true,
+    unoptimized: true, // Optional: If you don't need image optimization
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

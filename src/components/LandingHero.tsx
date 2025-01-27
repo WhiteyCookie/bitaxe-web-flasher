@@ -6,15 +6,17 @@ import { Button } from './ui/button'
 import { ESPLoader, Transport } from 'esptool-js'
 import { useTranslation } from 'react-i18next'
 import Header from './Header'
+import MainMenu from './MainMenu'
 import InstructionPanel from './InstructionPanel'
 import Selector from './Selector'
 import device_data from './firmware_data.json'
+import ThemeBackgrounds from './ThemeBackgrounds'
 
-import { Terminal } from '@xterm/xterm';
-import '@xterm/xterm/css/xterm.css';
+import { Terminal } from '@xterm/xterm'
+import '@xterm/xterm/css/xterm.css'
 
 export default function LandingHero() {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
   const [selectedDevice, setSelectedDevice] = useState<string>('')
   const [selectedBoardVersion, setSelectedBoardVersion] = useState('')
   const [selectedFirmware, setSelectedFirmware] = useState('')
@@ -34,10 +36,10 @@ export default function LandingHero() {
   const logsRef = useRef<string>('')
 
   useEffect(() => {
-    const userAgent = navigator.userAgent.toLowerCase();
-    const isChromium = /chrome|chromium|crios|edge/i.test(userAgent);
-    setIsChromiumBased(isChromium);
-  }, []);
+    const userAgent = navigator.userAgent.toLowerCase()
+    const isChromium = /chrome|chromium|crios|edge/i.test(userAgent)
+    setIsChromiumBased(isChromium)
+  }, [])
 
   useEffect(() => {
     if (terminalContainerRef.current && !terminalRef.current && isLogging) {
@@ -48,31 +50,31 @@ export default function LandingHero() {
           background: '#1a1b26',
           foreground: '#a9b1d6'
         }
-      });
-      terminalRef.current = term;
-      term.open(terminalContainerRef.current);
-      term.writeln(t('status.loggingStarted'));
-      logsRef.current = t('status.loggingStarted') + '\n';
+      })
+      terminalRef.current = term
+      term.open(terminalContainerRef.current)
+      term.writeln(t('status.loggingStarted'))
+      logsRef.current = t('status.loggingStarted') + '\n'
     }
 
     return () => {
       if (terminalRef.current) {
-        terminalRef.current.dispose();
-        terminalRef.current = null;
+        terminalRef.current.dispose()
+        terminalRef.current = null
       }
-    };
-  }, [isLogging, t]);
+    }
+  }, [isLogging, t])
 
-  const devices = device_data.devices;
+  const devices = device_data.devices
   const device = selectedDevice !== ''
-    ? devices.find(d => d.name == selectedDevice)!
-    : { boards: [] };
+    ? devices.find(d => d.name === selectedDevice)!
+    : { boards: [] }
   const board = selectedBoardVersion !== ''
-    ? device.boards.find(b => b.name == selectedBoardVersion)!
-    : { supported_firmware: [] };
+    ? device.boards.find(b => b.name === selectedBoardVersion)!
+    : { supported_firmware: [] }
   const firmware = selectedFirmware !== ''
-    ? board.supported_firmware.find(f => f.version == selectedFirmware)!
-    : { path: '' };
+    ? board.supported_firmware.find(f => f.version === selectedFirmware)!
+    : { path: '' }
 
   const handleConnect = async () => {
     setIsConnecting(true)
@@ -101,101 +103,99 @@ export default function LandingHero() {
 
   const handleDisconnect = async () => {
     if (isLogging) {
-      await stopSerialLogging();
+      await stopSerialLogging()
     }
     try {
       if (serialPortRef.current?.readable) {
-        await serialPortRef.current.close();
+        await serialPortRef.current.close()
       }
-      serialPortRef.current = null;
+      serialPortRef.current = null
       setIsConnected(false)
       setStatus("")
     } catch (error) {
-      console.error('Disconnect error:', error);
-      setStatus(`${t('status.disconnectError')}: ${error instanceof Error ? error.message : String(error)}`);
+      console.error('Disconnect error:', error)
+      setStatus(`${t('status.disconnectError')}: ${error instanceof Error ? error.message : String(error)}`)
     }
   }
 
   const startSerialLogging = async () => {
     if (!serialPortRef.current) {
-      setStatus(t('status.connectFirst'));
-      return;
+      setStatus(t('status.connectFirst'))
+      return
     }
 
     try {
-      setIsLogging(true);
-      const port = serialPortRef.current;
+      setIsLogging(true)
+      const port = serialPortRef.current
 
-      // First ensure any existing connections are cleaned up
       if (readerRef.current) {
-        await readerRef.current.cancel();
+        await readerRef.current.cancel()
       }
       if (readableStreamClosedRef.current) {
-        await readableStreamClosedRef.current;
+        await readableStreamClosedRef.current
       }
 
-      // Set up text decoder stream
-      const decoder = new TextDecoderStream();
-      const inputDone = port.readable.pipeTo(decoder.writable);
-      const inputStream = decoder.readable;
-      const reader = inputStream.getReader();
+      const decoder = new TextDecoderStream()
+      const inputDone = port.readable.pipeTo(decoder.writable)
+      const inputStream = decoder.readable
+      const reader = inputStream.getReader()
 
-      textDecoderRef.current = decoder;
-      readableStreamClosedRef.current = inputDone;
-      readerRef.current = reader;
+      textDecoderRef.current = decoder
+      readableStreamClosedRef.current = inputDone
+      readerRef.current = reader
 
       try {
         while (true) {
-          const { value, done } = await reader.read();
+          const { value, done } = await reader.read()
           if (done) {
-            reader.releaseLock();
-            break;
+            reader.releaseLock()
+            break
           }
-          terminalRef.current?.write(value);
-          logsRef.current += value;
+          terminalRef.current?.write(value)
+          logsRef.current += value
         }
       } catch (error) {
-        console.error('Error in read loop:', error);
+        console.error('Error in read loop:', error)
       }
     } catch (error) {
-      console.error('Serial logging error:', error);
-      setStatus(`${t('status.loggingError')}: ${error instanceof Error ? error.message : String(error)}`);
+      console.error('Serial logging error:', error)
+      setStatus(`${t('status.loggingError')}: ${error instanceof Error ? error.message : String(error)}`)
     }
-    setIsLogging(false);
-  };
+    setIsLogging(false)
+  }
 
   const stopSerialLogging = async () => {
     try {
       if (readerRef.current) {
-        await readerRef.current.cancel();
-        readerRef.current = null;
+        await readerRef.current.cancel()
+        readerRef.current = null
       }
       if (readableStreamClosedRef.current) {
-        await readableStreamClosedRef.current;
-        readableStreamClosedRef.current = null;
+        await readableStreamClosedRef.current
+        readableStreamClosedRef.current = null
       }
       if (textDecoderRef.current) {
-        textDecoderRef.current = null;
+        textDecoderRef.current = null
       }
     } catch (error) {
-      console.error('Error stopping serial logging:', error);
+      console.error('Error stopping serial logging:', error)
     } finally {
-      setIsLogging(false);
+      setIsLogging(false)
     }
-  };
+  }
 
   const downloadLogs = () => {
-    const blob = new Blob([logsRef.current], { type: 'text/plain' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    a.href = url;
-    a.download = `bitaxe-logs-${timestamp}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    window.URL.revokeObjectURL(url);
-    document.body.removeChild(a);
-  };
+    const blob = new Blob([logsRef.current], { type: 'text/plain' })
+    const url = window.URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-')
+    a.href = url
+    a.download = `bitaxe-logs-${timestamp}.txt`
+    document.body.appendChild(a)
+    a.click()
+    window.URL.revokeObjectURL(url)
+    document.body.removeChild(a)
+  }
 
   const handleStartFlashing = async () => {
     if (!serialPortRef.current) {
@@ -212,34 +212,27 @@ export default function LandingHero() {
     setStatus(t('status.preparing'))
 
     try {
-      // Stop logging if it's active
       if (isLogging) {
-        await stopSerialLogging();
+        await stopSerialLogging()
       }
 
-      // Close the current connection
       if (serialPortRef.current.readable) {
-        await serialPortRef.current.close();
+        await serialPortRef.current.close()
       }
 
-      // Create transport and ESPLoader for flashing
-      const transport = new Transport(serialPortRef.current);
+      const transport = new Transport(serialPortRef.current)
       const loader = new ESPLoader({
         transport,
         baudrate: 115200,
         romBaudrate: 115200,
         terminal: {
           clean() { },
-          writeLine(data: string) {
-            // setStatus(data);
-          },
-          write(data: string) {
-            // setStatus(data);
-          },
+          writeLine(data: string) { },
+          write(data: string) { },
         },
-      });
+      })
 
-      await loader.main();
+      await loader.main()
 
       if (!firmware) {
         throw new Error('No firmware available for the selected device and board version')
@@ -268,7 +261,7 @@ export default function LandingHero() {
         compress: true,
         reportProgress: (fileIndex, written, total) => {
           const percent = Math.round((written / total) * 100)
-          if (percent == 100) {
+          if (percent === 100) {
             setStatus(t('status.completed'))
           } else {
             setStatus(t('status.flashing', { percent: percent }))
@@ -292,10 +285,10 @@ export default function LandingHero() {
   if (!isChromiumBased) {
     return (
       <div className="container px-4 md:px-6 py-12 text-center">
-        <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none mb-4">
+        <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none mb-4 text-primary glow">
           {t('errors.browserCompatibility.title')}
         </h1>
-        <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
+        <p className="mx-auto max-w-[700px] text-foreground/80 md:text-xl">
           {t('errors.browserCompatibility.description')}
         </p>
       </div>
@@ -303,28 +296,35 @@ export default function LandingHero() {
   }
 
   return (
-    <>
-      <Header onOpenPanel={() => setIsPanelOpen(true)} />
-      <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
+    <div className="relative min-h-screen">
+      <div className="fixed inset-0 z-0">
+        <ThemeBackgrounds />
+      </div>
+      <div className="relative z-10">
+        <MainMenu />
+        <Header onOpenPanel={() => setIsPanelOpen(true)} />
+        <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
         <div className="container px-4 md:px-6">
           <div className="flex flex-col items-center space-y-4 text-center">
             <div className="space-y-2">
-              <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
+              <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none text-primary glow">
                 {t('hero.title')}
               </h1>
-              <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
+              <p className="mx-auto max-w-[700px] text-foreground/80 md:text-xl">
                 {t('hero.description')}
               </p>
             </div>
             <div className="w-full max-w-sm space-y-2">
               <Button
-                className="w-full"
+                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground glow"
                 onClick={isConnected ? handleDisconnect : handleConnect}
                 disabled={isConnecting || isFlashing}
               >
                 {isConnected ? t('hero.disconnect') : t('hero.connect')}
                 <Usb className="ml-2 h-4 w-4" />
               </Button>
+              
+              {/* Your existing Selectors */}
               <Selector
                 placeholder={t('hero.selectDevice')}
                 values={devices.map(d => d.name)}
@@ -354,17 +354,19 @@ export default function LandingHero() {
                   disabled={isConnecting || isFlashing}
                 />
               )}
+              
               <Button
-                className="w-full"
+                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground glow"
                 onClick={handleStartFlashing}
                 disabled={!selectedDevice || !selectedBoardVersion || isConnecting || isFlashing || !isConnected}
               >
                 {isFlashing ? t('hero.flashing') : t('hero.startFlashing')}
                 <Zap className="ml-2 h-4 w-4" />
               </Button>
+              
               <div className="flex gap-2">
                 <Button
-                  className="flex-1"
+                  className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground glow"
                   onClick={isLogging ? stopSerialLogging : startSerialLogging}
                   disabled={!isConnected || isFlashing}
                 >
@@ -372,7 +374,7 @@ export default function LandingHero() {
                   <ComputerIcon className="ml-2 h-4 w-4" />
                 </Button>
                 <Button
-                  className="flex-1"
+                  className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground glow"
                   onClick={downloadLogs}
                   disabled={!logsRef.current}
                 >
@@ -380,7 +382,8 @@ export default function LandingHero() {
                   <Download className="ml-2 h-4 w-4" />
                 </Button>
               </div>
-              <p className="mx-auto max-w-[400px] text-gray-500 md:text-m dark:text-gray-400">
+              
+              <p className="mx-auto max-w-[400px] text-foreground/80 md:text-m">
                 {t('hero.loggingDescription')}
               </p>
               {status && <p className="mt-2 text-sm font-medium">{status}</p>}
@@ -388,13 +391,14 @@ export default function LandingHero() {
             {isLogging && (
               <div
                 ref={terminalContainerRef}
-                className="w-full max-w-4xl h-[400px] bg-black rounded-lg overflow-hidden mt-8 border border-gray-700 text-left"
+                className="w-full max-w-4xl h-[400px] bg-black rounded-lg overflow-hidden mt-8 border border-primary/20 text-left"
               />
             )}
           </div>
         </div>
-      </section>
-      <InstructionPanel isOpen={isPanelOpen} onClose={() => setIsPanelOpen(false)} />
-    </>
+        </section>
+        <InstructionPanel isOpen={isPanelOpen} onClose={() => setIsPanelOpen(false)} />
+      </div>
+    </div>
   )
 }

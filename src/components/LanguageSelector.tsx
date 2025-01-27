@@ -26,16 +26,20 @@ const LanguageSelector = () => {
 
   return (
     <div className="flex items-center gap-2">
-      <span className="text-sm">{t('common.language')}:</span>
+      <span className="text-sm text-foreground/80">{t('common.language')}:</span>
       <Select value={i18n.language} onValueChange={handleLanguageChange}>
-        <SelectTrigger className="w-28">
+        <SelectTrigger className="w-28 border-primary/20 bg-background text-foreground/80">
           <SelectValue placeholder={getCurrentLanguageLabel()}>
             {getCurrentLanguageLabel()}
           </SelectValue>
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="bg-background border-primary/20">
           {languages.map((lang) => (
-            <SelectItem key={lang.value} value={lang.value}>
+            <SelectItem 
+              key={lang.value} 
+              value={lang.value}
+              className="text-foreground/80 hover:text-primary focus:text-primary focus:bg-primary/20"
+            >
               {lang.label}
             </SelectItem>
           ))}
