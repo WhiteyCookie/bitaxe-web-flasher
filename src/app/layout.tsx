@@ -3,9 +3,9 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { ClientThemeWrapper } from '../components/ClientThemeWrapper'
 import { I18nProvider } from '../components/I18nProvider'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 
 const inter = Inter({ subsets: ['latin'] })
-
 const basePath = process.env.NODE_ENV === 'production' ? '/bitaxe-web-flasher' : ''
 
 export const metadata: Metadata = {
@@ -32,13 +32,14 @@ export default function RootLayout({
       <body className={inter.className}>
         <ClientThemeWrapper>
           <I18nProvider>
-              <div className="min-h-screen bg-background text-foreground">
-                <main className="w-full p-4">
-                  {children}
-                </main>
-              </div>
+            <div className="min-h-screen bg-background text-foreground">
+              <main className="w-full p-4">
+                {children}
+              </main>
+            </div>
           </I18nProvider>
         </ClientThemeWrapper>
+        <SpeedInsights />
       </body>
     </html>
   )
