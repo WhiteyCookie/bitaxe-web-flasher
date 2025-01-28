@@ -16,7 +16,7 @@
         "@types/react": "18.2.17",
         "@types/react-dom": "18.2.7",
         "@xterm/xterm": "^5.5.0",
-        "@vercel/speed-insights": "^1.0.10",
+        "@vercel/speed-insights": "^1.1.0",
         "class-variance-authority": "^0.7.0",
         "clsx": "^2.1.1",
         "esptool-js": "^0.4.6",
