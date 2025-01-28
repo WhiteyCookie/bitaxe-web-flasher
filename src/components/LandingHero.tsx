@@ -296,109 +296,108 @@ export default function LandingHero() {
   }
 
   return (
-    <div className="relative min-h-screen">
-      <div className="fixed inset-0 z-0">
+    <>
+      <div className="fixed inset-0">
         <ThemeBackgrounds />
       </div>
-      <div className="relative z-10">
+      <div className="relative z-20">
         <MainMenu />
         <Header onOpenPanel={() => setIsPanelOpen(true)} />
         <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
-        <div className="container px-4 md:px-6">
-          <div className="flex flex-col items-center space-y-4 text-center">
-            <div className="space-y-2">
-              <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none text-primary glow">
-                {t('hero.title')}
-              </h1>
-              <p className="mx-auto max-w-[700px] text-foreground/80 md:text-xl">
-                {t('hero.description')}
-              </p>
-            </div>
-            <div className="w-full max-w-sm space-y-2">
-              <Button
-                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground glow"
-                onClick={isConnected ? handleDisconnect : handleConnect}
-                disabled={isConnecting || isFlashing}
-              >
-                {isConnected ? t('hero.disconnect') : t('hero.connect')}
-                <Usb className="ml-2 h-4 w-4" />
-              </Button>
-              
-              {/* Your existing Selectors */}
-              <Selector
-                placeholder={t('hero.selectDevice')}
-                values={devices.map(d => d.name)}
-                onValueChange={(value) => {
-                  setSelectedDevice(value)
-                  setSelectedBoardVersion('')
-                  setSelectedFirmware('')
-                }}
-                disabled={isConnecting || isFlashing || !isConnected}
-              />
-              {selectedDevice && (
+          <div className="container px-4 md:px-6">
+            <div className="flex flex-col items-center space-y-4 text-center">
+              <div className="space-y-2">
+                <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none text-primary glow">
+                  {t('hero.title')}
+                </h1>
+                <p className="mx-auto max-w-[700px] text-foreground/80 md:text-xl">
+                  {t('hero.description')}
+                </p>
+              </div>
+              <div className="w-full max-w-sm space-y-2">
+                <Button
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground glow"
+                  onClick={isConnected ? handleDisconnect : handleConnect}
+                  disabled={isConnecting || isFlashing}
+                >
+                  {isConnected ? t('hero.disconnect') : t('hero.connect')}
+                  <Usb className="ml-2 h-4 w-4" />
+                </Button>
+                
                 <Selector
-                  placeholder={t('hero.selectBoard')}
-                  values={device.boards.map(b => b.name)}
+                  placeholder={t('hero.selectDevice')}
+                  values={devices.map(d => d.name)}
                   onValueChange={(value) => {
-                    setSelectedBoardVersion(value)
+                    setSelectedDevice(value)
+                    setSelectedBoardVersion('')
                     setSelectedFirmware('')
                   }}
-                  disabled={isConnecting || isFlashing}
+                  disabled={isConnecting || isFlashing || !isConnected}
                 />
-              )}
-              {selectedBoardVersion && (
-                <Selector
-                  placeholder={t('hero.selectFirmware')}
-                  values={board.supported_firmware.map(f => f.version)}
-                  onValueChange={setSelectedFirmware}
-                  disabled={isConnecting || isFlashing}
-                />
-              )}
-              
-              <Button
-                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground glow"
-                onClick={handleStartFlashing}
-                disabled={!selectedDevice || !selectedBoardVersion || isConnecting || isFlashing || !isConnected}
-              >
-                {isFlashing ? t('hero.flashing') : t('hero.startFlashing')}
-                <Zap className="ml-2 h-4 w-4" />
-              </Button>
-              
-              <div className="flex gap-2">
+                {selectedDevice && (
+                  <Selector
+                    placeholder={t('hero.selectBoard')}
+                    values={device.boards.map(b => b.name)}
+                    onValueChange={(value) => {
+                      setSelectedBoardVersion(value)
+                      setSelectedFirmware('')
+                    }}
+                    disabled={isConnecting || isFlashing}
+                  />
+                )}
+                {selectedBoardVersion && (
+                  <Selector
+                    placeholder={t('hero.selectFirmware')}
+                    values={board.supported_firmware.map(f => f.version)}
+                    onValueChange={setSelectedFirmware}
+                    disabled={isConnecting || isFlashing}
+                  />
+                )}
+                
                 <Button
-                  className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground glow"
-                  onClick={isLogging ? stopSerialLogging : startSerialLogging}
-                  disabled={!isConnected || isFlashing}
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground glow"
+                  onClick={handleStartFlashing}
+                  disabled={!selectedDevice || !selectedBoardVersion || isConnecting || isFlashing || !isConnected}
                 >
-                  {isLogging ? t('hero.stopLogging') : t('hero.startLogging')}
-                  <ComputerIcon className="ml-2 h-4 w-4" />
+                  {isFlashing ? t('hero.flashing') : t('hero.startFlashing')}
+                  <Zap className="ml-2 h-4 w-4" />
                 </Button>
-                <Button
-                  className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground glow"
-                  onClick={downloadLogs}
-                  disabled={!logsRef.current}
-                >
-                  {t('hero.downloadLogs')}
-                  <Download className="ml-2 h-4 w-4" />
-                </Button>
+                
+                <div className="flex gap-2">
+                  <Button
+                    className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground glow"
+                    onClick={isLogging ? stopSerialLogging : startSerialLogging}
+                    disabled={!isConnected || isFlashing}
+                  >
+                    {isLogging ? t('hero.stopLogging') : t('hero.startLogging')}
+                    <ComputerIcon className="ml-2 h-4 w-4" />
+                  </Button>
+                  <Button
+                    className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground glow"
+                    onClick={downloadLogs}
+                    disabled={!logsRef.current}
+                  >
+                    {t('hero.downloadLogs')}
+                    <Download className="ml-2 h-4 w-4" />
+                  </Button>
+                </div>
+                
+                <p className="mx-auto max-w-[400px] text-foreground/80 md:text-m">
+                  {t('hero.loggingDescription')}
+                </p>
+                {status && <p className="mt-2 text-sm font-medium">{status}</p>}
               </div>
-              
-              <p className="mx-auto max-w-[400px] text-foreground/80 md:text-m">
-                {t('hero.loggingDescription')}
-              </p>
-              {status && <p className="mt-2 text-sm font-medium">{status}</p>}
+              {isLogging && (
+                <div
+                  ref={terminalContainerRef}
+                  className="w-full max-w-4xl h-[400px] bg-black rounded-lg overflow-hidden mt-8 border border-primary/20 text-left"
+                />
+              )}
             </div>
-            {isLogging && (
-              <div
-                ref={terminalContainerRef}
-                className="w-full max-w-4xl h-[400px] bg-black rounded-lg overflow-hidden mt-8 border border-primary/20 text-left"
-              />
-            )}
           </div>
-        </div>
         </section>
         <InstructionPanel isOpen={isPanelOpen} onClose={() => setIsPanelOpen(false)} />
       </div>
-    </div>
+    </>
   )
 }

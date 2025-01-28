@@ -48,141 +48,27 @@
     --input: 0 0% 15%;
     --ring: 28 100% 50%;
   }
-}
 
-@layer base {
-  * {
-    @apply border-border;
+  .japanese {
+    --background: 40 33% 96%;
+    --foreground: 225 64% 28%;
+    --card: 40 33% 98%;
+    --card-foreground: 225 64% 28%;
+    --popover: 40 33% 98%;
+    --popover-foreground: 225 64% 28%;
+    --primary: 225 64% 28%;
+    --primary-foreground: 40 33% 96%;
+    --secondary: 0 59% 54%;
+    --secondary-foreground: 40 33% 96%;
+    --muted: 168 47% 27%;
+    --muted-foreground: 225 64% 60%;
+    --accent: 34 36% 40%;
+    --accent-foreground: 40 33% 96%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 40 33% 96%;
+    --border: 225 64% 28%;
+    --input: 225 64% 28%;
+    --ring: 225 64% 28%;
+    --radius: 0.25rem;
   }
-  body {
-    @apply bg-background text-foreground;
-    background-image: 
-      linear-gradient(to bottom right, rgba(var(--primary) / 0.1) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(var(--primary) / 0.1) 1px, transparent 1px);
-    background-size: 24px 24px;
-  }
-}
-
-/* Text glow effect */
-.glow {
-  animation: glow 2s ease-in-out infinite alternate;
-}
-
-@keyframes glow {
-  from {
-    text-shadow: 0 0 10px hsl(var(--primary) / 0.5),
-                 0 0 20px hsl(var(--primary) / 0.3),
-                 0 0 30px hsl(var(--primary) / 0.2);
-  }
-  to {
-    text-shadow: 0 0 20px hsl(var(--primary) / 0.6),
-                 0 0 30px hsl(var(--primary) / 0.4),
-                 0 0 40px hsl(var(--primary) / 0.2);
-  }
-}
-
-/* Floating animation */
-.float {
-  animation: float 3s ease-in-out infinite;
-}
-
-@keyframes float {
-  0% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-  100% {
-    transform: translateY(0px);
-  }
-}
-
-/* Circuit animations */
-.circuit-path {
-  animation: circuit-flow 4s linear infinite;
-  stroke-dasharray: 20;
-  stroke-linecap: round;
-}
-
-@keyframes circuit-flow {
-  0% {
-    stroke-dashoffset: 1000;
-    stroke-opacity: 0.3;
-  }
-  50% {
-    stroke-opacity: 0.7;
-  }
-  100% {
-    stroke-dashoffset: 0;
-    stroke-opacity: 0.3;
-  }
-}
-
-.circuit-node {
-  animation: node-pulse 2s ease-in-out infinite;
-}
-
-@keyframes node-pulse {
-  0% {
-    r: 2;
-    filter: drop-shadow(0 0 2px hsl(var(--primary)));
-  }
-  50% {
-    r: 4;
-    filter: drop-shadow(0 0 6px hsl(var(--primary)));
-  }
-  100% {
-    r: 2;
-    filter: drop-shadow(0 0 2px hsl(var(--primary)));
-  }
-}
-
-/* Menu transitions */
-.slide-in {
-  animation: slideIn 0.3s ease-out forwards;
-}
-
-.slide-out {
-  animation: slideOut 0.3s ease-out forwards;
-}
-
-@keyframes slideIn {
-  from {
-    transform: translateX(-100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-@keyframes slideOut {
-  from {
-    transform: translateX(0);
-    opacity: 1;
-  }
-  to {
-    transform: translateX(-100%);
-    opacity: 0;
-  }
-}
-
-/* Circuit tracer effect */
-.circuit-tracer {
-  animation: trace 3s linear infinite;
-  stroke-dasharray: 5;
-}
-
-@keyframes trace {
-  to {
-    stroke-dashoffset: -1000;
-  }
-}
-
-/* Background elements */
-.background-animation {
-  pointer-events: none;
-  user-select: none;
 }

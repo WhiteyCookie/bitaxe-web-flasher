@@ -6,9 +6,9 @@ export function ClientThemeWrapper({ children }: { children: React.ReactNode }) 
   return (
     <ThemeProvider 
       attribute="class" 
-      defaultTheme="bitcoin" 
+      defaultTheme="japanese" 
       enableSystem={false}
-      themes={["dark", "bitcoin"]}
+      themes={["dark", "bitcoin", "japanese"]}
     >
       {children}
     </ThemeProvider>

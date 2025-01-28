@@ -1,7 +1,7 @@
 "use client"
 
 import { useTheme } from 'next-themes'
-import { CircuitBoard, Bitcoin } from 'lucide-react'
+import { CircuitBoard, Bitcoin, Cherry } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -18,13 +18,18 @@ export function ThemeToggle() {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon" className="w-10 h-10 relative hover:bg-primary/20">
           <CircuitBoard 
-            className={`h-5 w-5 transition-all duration-300 ${
-              theme === 'bitcoin' ? 'scale-0 rotate-90' : 'scale-100 rotate-0'
+            className={`h-5 w-5 absolute transition-all duration-300 ${
+              theme === 'dark' ? 'scale-100 rotate-0' : 'scale-0 rotate-90'
             }`} 
           />
           <Bitcoin 
-            className={`absolute h-5 w-5 transition-all duration-300 ${
+            className={`h-5 w-5 absolute transition-all duration-300 ${
               theme === 'bitcoin' ? 'scale-100 rotate-0' : 'scale-0 -rotate-90'
+            }`} 
+          />
+          <Cherry 
+            className={`h-5 w-5 absolute transition-all duration-300 ${
+              theme === 'japanese' ? 'scale-100 rotate-0' : 'scale-0 rotate-90'
             }`} 
           />
         </Button>
@@ -43,6 +48,13 @@ export function ThemeToggle() {
         >
           <Bitcoin className="h-4 w-4" />
           <span>Bitcoin OG</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem 
+          onClick={() => setTheme("japanese")}
+          className="flex items-center gap-2"
+        >
+          <Cherry className="h-4 w-4" />
+          <span>Japanese</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
