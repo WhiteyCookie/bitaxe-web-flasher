@@ -109,7 +109,7 @@ export const SakuraPattern = () => {
         position: 'absolute',
         top: 0,
         left: 0,
-        backgroundColor: config.colors.background
+        backgroundColor: 'rgba(246, 245, 240, 0.5)' // Add alpha value here
       }}
     >
       <defs>
